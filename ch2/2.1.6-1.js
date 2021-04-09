@@ -23,3 +23,5 @@ Zero.prototype.sayName = function() {
 };
 var oldZero = new Zero('human', 'Zero', 'Cho');
 Human.isHuman(oldZero); // true
+
+console.log( Human.isHuman(oldZero) );

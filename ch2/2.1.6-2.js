@@ -1,3 +1,4 @@
+
 class Human {
   constructor(type = 'human') {
     this.type = type;
@@ -26,4 +27,17 @@ class Zero extends Human {
 }
 
 const newZero = new Zero('human', 'Zero', 'Cho');
+
+
+console.log('firstName', newZero.firstName);
+console.log('lastName', newZero.lastName);
+console.log('type', newZero.type);
+
+
+newZero.firstName = 'NONE';
+console.log('firstName', newZero.firstName);
+
 Human.isHuman(newZero); // true
+
+
+
