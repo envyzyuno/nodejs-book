@@ -8,7 +8,7 @@ const promise = new Promise((resolve, reject) => {
 });
 // 다른 코드가 들어갈 수 있음
 promise
-  .then((message) => {
+  .then( message  => {
     console.log(message); // 성공(resolve)한 경우 실행
   })
   .catch((error) => {
