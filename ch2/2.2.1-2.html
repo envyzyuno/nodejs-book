@@ -2,8 +2,8 @@
 <script>
   axios.get('https://www.zerocho.com/api/get')
     .then((result) => {
-      console.log(result);
-      console.log(result.data); // {}
+      console.log('resut:', result);
+      console.log('resut.data:', result.data); // {}
     })
     .catch((error) => {
       console.error(error);
