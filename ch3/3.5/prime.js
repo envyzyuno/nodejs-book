@@ -1,3 +1,7 @@
+
+/**
+ * worker thread 를 사용하지 않은 소수 추출
+ */
 const min = 2;
 const max = 10000000;
 const primes = [];
@@ -20,6 +24,7 @@ function findPrimes(start, range) {
 }
 
 console.time('prime');
-findPrimes(min, max);
+/** 소수 찾기  */
+findPrimes( min, max );
 console.timeEnd('prime');
-console.log(primes.length);
+console.log('소수의 개수',primes.length);
