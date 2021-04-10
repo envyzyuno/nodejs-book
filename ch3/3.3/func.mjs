@@ -1,4 +1,4 @@
-import { odd, even } from './var';
+import { odd, even } from './var.js';
 
 function checkOddOrEven(num) {
   if (num % 2) { // 홀수면
@@ -7,4 +7,6 @@ function checkOddOrEven(num) {
   return even;
 }
 
-export default checkOddOrEven;
+
+export default { checkOddOrEven };
+//export default checkOddOrEven;

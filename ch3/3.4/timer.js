@@ -11,8 +11,8 @@ const timeout2 = setTimeout(() => {
 }, 3000);
 
 setTimeout(() => {
-  clearTimeout(timeout2);
-  clearInterval(interval);
+  clearTimeout(timeout2); /* 클리어되기 때문에 수행되지 않는다. */
+  clearInterval(interval); /* 인터벌 클리어 되었기때문에 반복되지 않는다. */
 }, 2500);
 
 const immediate = setImmediate(() => {
