@@ -14,7 +14,7 @@ fs.readFile( file_path, (err, data) => {
 });
 
 
-/** readFilePromise.js 에서 다 낫은 방식을 보여준다.
+/** readFilePromise.js 에서 다 좋은 방식을 보여준다.
  * 
  * 
 
