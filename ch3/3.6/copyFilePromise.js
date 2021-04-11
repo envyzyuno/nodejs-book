@@ -1,9 +1,8 @@
 const fs = require('fs').promises;
 
-fs.copyFile('readme4.txt', 'writeme4.txt')
-  .then(() => {
-    console.log('복사 완료');
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+const original_file = 'ch3/3.6/readme4.txt';
+const copy_file = 'ch3/3.6/writeme4.txt';
+
+fs.copyFile( original_file, copy_file )
+  .then( () => console.log('복사완료') )
+  .catch( error => console.log(error) );

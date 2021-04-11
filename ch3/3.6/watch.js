@@ -1,6 +1,12 @@
 const fs = require('fs');
 
-fs.watch('./target.txt', (eventType, filename) => {
+const target_file = 'ch3/3.6/target.txt';
+
+fs.watch( target_file , (eventType, filename) => {
   console.log(eventType, filename);
 });
+
+
+
+
 
