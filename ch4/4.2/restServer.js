@@ -6,6 +6,7 @@ const users = {}; // 데이터 저장용
 http.createServer(async (req, res) => {
   try {
     if (req.method === 'GET') {
+/** [START] GET METHOD  */
       if (req.url === '/') {
         const data = await fs.readFile('./restFront.html');
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
@@ -15,6 +16,8 @@ http.createServer(async (req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         return res.end(data);
       } else if (req.url === '/users') {
+        
+        /** application/json 으로 응답.  */
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         return res.end(JSON.stringify(users));
       }
@@ -25,7 +28,10 @@ http.createServer(async (req, res) => {
       } catch (err) {
         // 주소에 해당하는 라우트를 못 찾았다는 404 Not Found error 발생
       }
+/** [E N D] GET METHOD  */
+
     } else if (req.method === 'POST') {
+/** [START] POST METHOD  */
       if (req.url === '/user') {
         let body = '';
         // 요청의 body를 stream 형식으로 받음
@@ -42,7 +48,10 @@ http.createServer(async (req, res) => {
           res.end('ok');
         });
       }
+/** [E N D] POST METHOD  */
+
     } else if (req.method === 'PUT') {
+/** [START] PUT METHOD  */
       if (req.url.startsWith('/user/')) {
         const key = req.url.split('/')[2];
         let body = '';
@@ -56,14 +65,20 @@ http.createServer(async (req, res) => {
           return res.end('ok');
         });
       }
+/** [E N D] PUT METHOD  */
+
     } else if (req.method === 'DELETE') {
+/** [START] DELETE METHOD  */
       if (req.url.startsWith('/user/')) {
         const key = req.url.split('/')[2];
         delete users[key];
         res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
         return res.end('ok');
       }
+/** [E N D] DELETE METHOD  */
     }
+
+    /** 해당 라우터가 존재하지 않을경우 404 NOT FOUND */
     res.writeHead(404);
     return res.end('NOT FOUND');
   } catch (err) {

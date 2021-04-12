@@ -12,6 +12,7 @@ const parseCookies = (cookie = '') =>
       return acc;
     }, {});
 
+/** session repository */
 const session = {};
 
 http.createServer(async (req, res) => {
@@ -26,6 +27,14 @@ http.createServer(async (req, res) => {
       name,
       expires,
     };
+
+    /**
+     * cookie session: 내부적으로 생성된 unique id 를 생성하여
+     * 애플리케이션 메모리 내부의 session repository 와 비교한다.
+     * 추후에 cookie 가 expire 되었을때 session repository 의 쓰레기 세션 데이터는 어떻게 할것인가?
+     * 
+     * JAVA 의 jsessionid 를 쿠키로 세션을 구분하는것과 같다.
+     */
     res.writeHead(302, {
       Location: '/',
       'Set-Cookie': `session=${uniqueInt}; Expires=${expires.toGMTString()}; HttpOnly; Path=/`,
