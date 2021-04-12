@@ -6,8 +6,6 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 dotenv.config();
-const indexRouter = require('./routes');
-const userRouter = require('./routes/user');
 
 const app = express();
 app.set('port', process.env.PORT || 3000);
@@ -28,9 +26,24 @@ app.use(session({
   name: 'session-cookie',
 }));
 
-app.use('/', indexRouter);
-app.use('/user', userRouter);
+/**
+ * spring controller 
+ * @RequestMapping 처럼 
+ * exports 된 라우터들을 url 과 매핑시킨다.
+ * 
+ * router 내부에도 인자 (req, res, next) 가
+ * 정의되어 있을것이고. 후처리로 next(); 를 수행할것이다.
+ */
+app.use('/',      require('./routes') );
+app.use('/user',  require('./routes/user'));
 
+/**
+ * app.use 가 정의된 순서대로 
+ * url 이 매핑된다.
+ * 요청 url 에 매핑되는 router 가 존재하지 않을시에
+ * 404 not found
+ * error 이 발생했을경우 500 으로 redirect 된다.
+ */
 app.use((req, res, next) => {
   res.status(404).send('Not Found');
 });
