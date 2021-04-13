@@ -1,27 +1,36 @@
-const Sequelize = require('sequelize');
+const Sequelize =  require('sequelize');
+
 const User = require('./user');
 const Comment = require('./comment');
 
-/** .env 에 정보가 있으면 해당 정보 없으면 development */
+/** .env 파일 조회 */
 const env = process.env.NODE_ENV || 'development';
-const config = require('../config/config')[env];
+
+/** CONFIG 조회 */
+const config = require('../config/config.json')[env];
+
+/** 모듈화 할 객체 생성  */
 const db = {};
 
-/**
- * 시퀄라이즈 생성
- */
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
+/** 시퀄라이즈 객체 생성 */
+const sequelize = new Sequelize( config.database, 
+                                config.username, 
+                                config.password, 
+                                config);
+/** DB JSON 에 세팅 */
+db.sequelize =  sequelize;
+/** 테이블 MODEL 세팅 */
 db.User = User;
 db.Comment = Comment;
 
-User.init(sequelize);
-Comment.init(sequelize);
+/** 테이블별 초기화  */
+User.init( sequelize );
+Comment.init( sequelize );
 
-User.associate(db);
-Comment.associate(db);
+/** 연관관계 세팅 */
+User.associate( db );
+Comment.associate( db );
 
+
+/** exports 된것이 json 형태일경우.. */
 module.exports = db;
