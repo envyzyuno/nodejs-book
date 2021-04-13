@@ -44,7 +44,10 @@ app.use('/user',  require('./routes/user'));
  * 404 not found
  * error 이 발생했을경우 500 으로 redirect 된다.
  */
+
+
 app.use((req, res, next) => {
+
   res.status(404).send('Not Found');
 });
 

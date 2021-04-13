@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+
 const dotenv = require('dotenv');
 const path = require('path');
 
@@ -149,8 +150,14 @@ app.post('/upload', upload.single('image'), (req, res) => {
    *     upload.none
    */
   console.log('##################################');
-  console.log( req.file ); /** upload 성공시에 multer 가 req 에 세팅해준다.   */
-  console.log( req.body ); /** app.use(express.json()); 를 통해서 파싱된 내용  */
+  console.log( 'file:',req.file ); /** upload 성공시에 multer 가 req 에 세팅해준다.   */
+  console.log( 'body',req.body ); /** app.use(express.json()); 를 통해서 파싱된 내용  */
+  console.log( 'query',req.query ); /** query parameter 조회 */
+  console.log( 'params',req.params );
+  /**
+   * query parameter 와 body 를 함께 받을수 있는 방법은 없나?
+   */
+  
   console.log('##################################');
   
   res.send('ok');
