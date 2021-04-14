@@ -238,6 +238,11 @@ function unmanaged_transaction(){
 /** 트랜잭션 테스트  */
 router.get('/transaction', async( req, res, next ) =>{
     try {
+
+        /**
+         * 참조
+         * https://sequelize.org/master/manual/transactions.html
+         */
         const result = await managed_transaction();
         //const result = await unmanaged_transaction();
         res.json( result );
