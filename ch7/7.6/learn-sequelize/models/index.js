@@ -17,6 +17,7 @@ const sequelize = new Sequelize( config.database,
                                 config.username, 
                                 config.password, 
                                 config);
+                                
 /** DB JSON 에 세팅 */
 db.sequelize =  sequelize;
 /** 테이블 MODEL 세팅 */

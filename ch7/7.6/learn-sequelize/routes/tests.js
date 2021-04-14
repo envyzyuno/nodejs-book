@@ -169,6 +169,84 @@ router.get('/remove', async (req, res, next) => {
 
 });
 
+
+
+function managed_transaction(){
+    console.log('MANAGED_TRANSACTION START!!!!');
+    return new Promise( async(resolve, reject) => {
+        try {
+            await sequelize.transaction( async(transaction) => {
+                const user01 = await User.create({
+                                    name: 'trans_test_01',
+                                    age: 111,
+                                    married: false,
+                                    comment: '회원설명',
+                                }, { transaction } );
+                
+                //throw new Error('트랜잭션 실패');                 
+                const user02 = await User.create({
+                                    name: 'trans_test_02',
+                                    age: 111,
+                                    married: false,
+                                    comment: '회원설명',
+                                }, { transaction } ); 
+
+                resolve( [ user01, user02] );
+            });   
+        } catch (error) {
+            reject(error);
+        }
+
+    });
+}
+
+function unmanaged_transaction(){
+    return new Promise( async (resolve, reject) => {
+        /**
+         * raw type code 이기는 하지만..
+         * 오히려 이게 눈에 더 잘들어온다...
+         */
+        const transaction =  await sequelize.transaction();
+        try {
+            const user01 = await User.create({
+                                name: 'trans_test_01',
+                                age: 111,
+                                married: false,
+                                comment: '회원설명',
+                            }, { transaction } );
+
+            //throw new Error('트랜잭션 실패');                
+            const user02 = await User.create({
+                                name: 'trans_test_02',
+                                age: 111,
+                                married: false,
+                                comment: '회원설명',
+                            }, { transaction } ); 
+            
+            await transaction.commit();               
+            resolve( [user01, user02 ] );  
+        } catch (error) {
+            await transaction.rollback();
+            reject( error );
+        }
+
+    });
+
+
+}
+
+/** 트랜잭션 테스트  */
+router.get('/transaction', async( req, res, next ) =>{
+    try {
+        const result = await managed_transaction();
+        //const result = await unmanaged_transaction();
+        res.json( result );
+    } catch (error) {
+        console.error('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        next(error);
+    }
+});
+
 /** 1건의 사용자 정보 조회 */
 function getUserOnce( userId = 0 ){
 
