@@ -127,6 +127,7 @@ document.getElementById('comment-form').addEventListener('submit', async (e) => 
     return alert('댓글을 입력하세요');
   }
   try {
+    /** ajax body 로 전송 */
     await axios.post('/comments', { id, comment });
     getComment(id);
   } catch (err) {

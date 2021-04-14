@@ -42,6 +42,13 @@ app.use( express.static( path.join( __dirname, 'public' ) ) );
 app.use( express.json() );
 app.use( express.urlencoded( { extended: false } ) );
 
+/** url 라우터 주입 */
+app.use('/', require('./routes/index') );
+app.use('/users', require('./routes/users') );
+app.use('/comments', require('./routes/comments') );
+app.use('/tests', require('./routes/tests'));
+
+
 
 /**
  * 더이상 url 에 매핑되는 라우터가 존재하지 않을경우
@@ -56,10 +63,14 @@ app.use( (req, res, next) =>{
  * 공통 에러 처리
  */
 app.use( ( err, req, res, next) =>{
+
+    console.log( err );
     res.locals.message = err.message;
     res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
     res.status( err.status || 500 );
-    res.render( 'error' );
+    res.render( 'error' ); /** views/error.html 렌더링 */
+
+
 });
 
 /**
@@ -72,73 +83,20 @@ app.listen( app.get('port'), () => {
 
  
 
-const { User, Comment } = require( './models' );
-const {  Op } = require('sequelize');
-
-
-async function testSql(){
-    const { result, metadata } = await sequelize.query('SELECT * FROM COMMENTS');
-
-    console.log( 'result:', result );
-    console.log( 'metadata:', metadata );
-}
-
-testSql();
 return;
 
 
 
-/** 테스트를 위한 임시 코드 
-User.create( {
-    name: 'abc',
-    age: 100,
-    married: false,
-    comment: 'What The Fuck..'
-});
-User.findAll({})
-    .then( (list) => {
-        console.log('findAllList---------------------');
-        console.log('length:', list.length );
-    })
-    .finally( () => {
-        console.log('--------------------------------\n');
-    });
- */
-/** 
- User.findAll( 
-        { attributes: ['name', 'married' ],
-           where: {
-            married: false,
-            [ Op.or ]: [ { married:false} , { age: { [Op.gt]: 30 } } ]     
-           },
-           order: [ ['age', 'DESC'] ],
-           limit: 100,
-           offset: 1,
-        }
-    )
-    .then( (list) => {
-        console.log('findAllList2---------------------');
-        list.forEach( d => {
-            console.log( d.dataValues );
-        });
-        
-    })
-    .finally( () => {
-        console.log('--------------------------------\n');
-    });
-    ;
- */
- /**
-    User.update( 
-    { comment: 'xxxxx' },
-    { where: { id: 3 }}
-    );
-     */
-    /**     
-    User.destroy( {
-        where: { id : 3 }
-    });
-*/
+
+
+
+
+
+
+
+
+const { User, Comment } = require( './models' );
+const {  Op } = require('sequelize');
 
 /**
  * 이름으로 사용자 1명 조회 
@@ -174,26 +132,6 @@ async function getUserOnce( user_id ){
     // console.log('user Comments:', comments);
    // console.log('user answers:', answers );
 }
-
-
-/** 사용자 아이디로  */
-async function addComment( user_id, comment ){
-
-    const user = await 
-            User.findOne( {         
-                            where: { id: user_id, },
-    });
-    const _comment =  await Comment.create( {   comment: '댓글1',   } );
-
-    await user.addComment( [ _comment ] );
-
-}
-
-
-//addComment( 1, '코멘트1' );
-
-  getUserOnce( 1 );
-
 
 
 

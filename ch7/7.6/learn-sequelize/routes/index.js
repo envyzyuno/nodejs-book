@@ -6,7 +6,12 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll();
-    res.render('sequelize', { users });
+    /**
+     * views/sequelize.html 페이지를 랜더하며
+     * users: users 를 세팅한다.
+     */
+    res.render('sequelize',{ users } );
+    
   } catch (err) {
     console.error(err);
     next(err);

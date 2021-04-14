@@ -5,6 +5,10 @@ const router = express.Router();
 
 router.post('/', async (req, res, next) => {
   try {
+
+    /**
+     * ajax body 로 데이터 가져왔기에 req.body
+     */
     const comment = await Comment.create({
       commenter: req.body.id,
       comment: req.body.comment,
@@ -20,6 +24,7 @@ router.post('/', async (req, res, next) => {
 router.route('/:id')
   .patch(async (req, res, next) => {
     try {
+      /** path variable 로 가져왔기에 req.params.id  */
       const result = await Comment.update({
         comment: req.body.comment,
       }, {
