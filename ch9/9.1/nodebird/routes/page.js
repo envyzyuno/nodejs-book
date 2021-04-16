@@ -1,29 +1,37 @@
 const express = require('express');
-
 const router = express.Router();
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
-router.use((req, res, next) => {
-  res.locals.user = null;
-  res.locals.followerCount = 0;
-  res.locals.followingCount = 0;
-  res.locals.followerIdList = [];
-  next();
+router.use((req, res, next) =>{
+    res.locals.user = req.user;
+    res.locals.followerCount = 0;
+    res.locals.followingCount = 0;
+    res.locals.followerIdList = [];
+    next();
 });
 
-router.get('/profile', (req, res) => {
-  res.render('profile', { title: '내 정보 - NodeBird' });
+/** 내정보 (로그인 사용자만 조회 가능) */
+router.get('/profile', 
+  isLoggedIn,
+  (req, res) => {
+    const model = { title: '내 정보 - NodeBird' };
+    res.render('profile', model );
 });
 
-router.get('/join', (req, res) => {
-  res.render('join', { title: '회원가입 - NodeBird' });
+/** 회원가입 (비로그인 사용자만 사용가능) */
+router.get('/join', 
+    isNotLoggedIn,
+     (req, res) => {
+    const model = { title: '회원 가입 - NodeBird' };
+    res.render('join', model );
 });
 
-router.get('/', (req, res, next) => {
-  const twits = [];
-  res.render('main', {
-    title: 'NodeBird',
-    twits,
-  });
+
+
+router.get('/', (req, res) => {
+    const twits = [];
+    const model = { title: 'NodeBird', twits: twits };
+    res.render('main', model );
 });
 
 module.exports = router;

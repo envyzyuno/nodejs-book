@@ -1,11 +1,10 @@
 {
   "development": {
     "username": "root",
-    "password": "12345",
-    "database": "nodebird",
+    "password": null,
+    "database": "database_development",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "logging": true
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
