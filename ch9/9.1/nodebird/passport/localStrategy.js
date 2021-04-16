@@ -10,7 +10,7 @@ module.exports= () => {
             { usernameField: 'email', passwordField: 'password' },
             async( email, password, done ) => { 
                 /** done: passport.authenticate 의 콜백함수 
-                 * (authError, user, info)=>{}
+                 *  (authError, user, info)=>{}
                  */
                 try {
                     const exUser = await User.findOne( { where: { email } } );
