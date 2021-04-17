@@ -23,12 +23,19 @@ router.post( '/join',
                 return res.redirect('/join?error=exist');
             }
             /** 비밀번호 암호화 */
-            const hash = bcrypt.hash( password, 12 );
+            const hash = await bcrypt.hash( password, 12 );
+
+            console.log('User:::::::',User);
+
+            User.create();
+
+
             /** 사용자 정보 저장 */
             await User.create({
                 email,
                 nick,
-                password: hash
+                password: hash,
+                provider: 'local',
             });
             /** 메인 페이지로 이동 GET 일것 같다.. */
             return res.redirect('/');      
@@ -66,7 +73,7 @@ router.post('/login',
 
 /** 로구아웃 처리 */
 router.get('/logout',
-    isLoggedIn,
+    // isLoggedIn,
     (req, res, next) => {
         /** 로그아웃 이후 메인 페이지로 이동 */
         req.logout();
