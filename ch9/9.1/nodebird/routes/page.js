@@ -7,11 +7,8 @@ router.use((req, res, next) =>{
     res.locals.user = req.user;
    
     /** 로그인 사용자를 팔로잉 하는 카운트   */
-    res.locals.followerCount = req.user ? req.user.Follwers.length : 0;
+    res.locals.followerCount = req.user ? req.user.Followers.length : 0;
 
-    
-
-    console.log(req.user);
 
     /** 로그인 사용자가 팔로잉 하는 카운트 */
     res.locals.followingCount = req.user ? req.user.Followings.length : 0 ;
@@ -30,6 +27,8 @@ router.get('/profile',
   isLoggedIn,
   (req, res) => {
     const model = { title: '내 정보 - NodeBird' };
+
+    
     res.render('profile', model );
 });
 
@@ -58,9 +57,13 @@ router.get('/', async(req, res, next ) => {
             });
         const model = { title: 'NodeBird', twits: posts,  };    
         
+        /** 
         console.log('###################');
         console.log( model );
         console.log('###################');
+        
+        */
+
         res.render('main', model );    
         
     } catch (error) {

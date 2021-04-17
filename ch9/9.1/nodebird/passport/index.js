@@ -31,7 +31,7 @@ module.exports = () => {
                     {
                         model: User,
                         attributes: ['id', 'nick' ],
-                        as: 'Follwers'   /** 로그인 사용자를 팔로잉 하는 사용자 목록 */
+                        as: 'Followers'   /** 로그인 사용자를 팔로잉 하는 사용자 목록 */
                     },
 
                     {

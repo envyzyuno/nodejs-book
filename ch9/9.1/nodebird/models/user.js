@@ -48,24 +48,24 @@ class User extends Sequelize.Model {
             sourceKey: 'id',
         });
 
-        const Follwers = db.User;
+        const Followers = db.User;
         const Followings = db.User;
 
         /**
          * n        : 1
-         * Follwers : Followings
+         * Followers : Followings
          */
-        Follwers.belongsToMany( Followings, {
+         Followers.belongsToMany( Followings, {
             foreignKey: 'followingId',
-            as: 'Follwers',
+            as: 'Followers',
             through: 'Follow', /** 테이블명 + Sequelize 모델명 */
         });
 
         /**
          * n          : 1 
-         * Followings : Follwers
+         * Followings : Followers
          */
-        Followings.belongsToMany( Follwers, {
+        Followings.belongsToMany( Followers, {
             foreignKey: 'followerId',
             as: 'Followings',
             through: 'Follow', /** 테이블명 + Sequelize 모델명 */
