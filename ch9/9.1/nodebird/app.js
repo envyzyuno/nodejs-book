@@ -35,6 +35,7 @@ sequelize.sync({ force: false} )
 
 app.use(morgan('dev'));
 app.use(express.static( path.join(__dirname, 'public') ));
+app.use('/img',express.static( path.join(__dirname, 'uploads' )) );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -62,7 +63,9 @@ app.use(passport.session());
 
 /** 서버스별 url 라우터 추가 */
 app.use('/', require('./routes/page') );
-
+app.use('/auth', require('./routes/auth') );
+app.use('/post', require('./routes/post') );
+app.use('/user', require('./routes/user'));
 
 /** 404 처리 */
 app.use((req, res, next) => {

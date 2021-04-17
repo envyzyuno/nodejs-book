@@ -23,10 +23,36 @@ module.exports = () => {
      * done: 후처리 함수
      */
     passport.deserializeUser( (id, done) => {
+        /** 로그인한 사용자 정보 조회  */        
+        User.findOne(
+            { 
+                where: {id},
+                include: [
+                    {
+                        model: User,
+                        attributes: ['id', 'nick' ],
+                        as: 'Follwers'   /** 로그인 사용자를 팔로잉 하는 사용자 목록 */
+                    },
+
+                    {
+                        model: User,
+                        attributes: ['id', 'nick' ],
+                        as: 'Followings'   /** 로그인 사용자가 팔로잉 하는 사용자 목록 */
+                    },
+
+                ], 
+            },
+
+            
+        )
+        .then( user => done( null, user ) )
+        .catch( err => done( err ) );
+
+        /**
         User.findOne( { where: {id} } )
             .then( user => done( null, user ) )
             .catch( err => done( err ) );
-        ;
+         */
     });
 
     local();

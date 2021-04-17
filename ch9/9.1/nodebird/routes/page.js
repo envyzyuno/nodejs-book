@@ -1,12 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { Post, User, Hashtag } = require('../models');
 
 router.use((req, res, next) =>{
     res.locals.user = req.user;
-    res.locals.followerCount = 0;
-    res.locals.followingCount = 0;
-    res.locals.followerIdList = [];
+   
+    /** 로그인 사용자를 팔로잉 하는 카운트   */
+    res.locals.followerCount = req.user ? req.user.Follwers.length : 0;
+
+    
+
+    console.log(req.user);
+
+    /** 로그인 사용자가 팔로잉 하는 카운트 */
+    res.locals.followingCount = req.user ? req.user.Followings.length : 0 ;
+
+     /** 로그인 사용자가 팔로잉 하는 id 리스트 
+      * 
+      * 
+      */
+    res.locals.followerIdList = req.user ? req.user.Followings.map( f => f.id ) : [] ;
+ 
     next();
 });
 
@@ -27,11 +42,66 @@ router.get('/join',
 });
 
 
+/**
+ *  메인 페이지 호출
+ */
+router.get('/', async(req, res, next ) => {
 
-router.get('/', (req, res) => {
-    const twits = [];
-    const model = { title: 'NodeBird', twits: twits };
-    res.render('main', model );
+    try {
+        const posts = await 
+            Post.findAll({
+                include:{
+                    model: User,
+                    attributes: [ 'id', 'nick' ],
+                },
+                order:[ [ 'createdAt', 'DESC' ] ],
+            });
+        const model = { title: 'NodeBird', twits: posts,  };    
+        
+        console.log('###################');
+        console.log( model );
+        console.log('###################');
+        res.render('main', model );    
+        
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+
+});
+
+
+/** hashtag 페이지 호출 */
+router.get('/hashtag', async(req, res, next) => {
+    const query = req.query.hashtag;
+    if( !query ){
+        /** 메인페이지로 이동  */
+        return res.redirect('/');
+    }
+
+    try {
+
+        const hashtag = await Hashtag.findOne({ where: { title : query } });
+        
+        let posts = [];
+        if( hashtag ){
+            posts = await hashtag.getPosts({
+                include: [ { model: User } ]
+            });
+        }
+
+        const model = {
+            title: `${query} | NodeBird`,
+            twits: posts,
+        };
+
+        res.render('main', model );
+
+    } catch (error) {
+        console.error(error);
+        return next(error);
+    }
+
 });
 
 module.exports = router;
