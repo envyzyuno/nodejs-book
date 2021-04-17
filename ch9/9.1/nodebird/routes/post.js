@@ -43,6 +43,32 @@ router.post('/img',
     }
 );
 
+/** 포스트 삭제 */
+router.delete('/:id',
+    isLoggedIn,
+    async(req, res, next) =>{
+        try {
+            const loginId = req.user.id;
+            /** 삭제할 포스트 아이디 */
+            const postId = parseInt( req.params.id, 0 );
+    
+            const post =  await Post.findOne({ 
+                                                attributes: ['userId'],
+                                                where: { userId: loginId } 
+                                            });
+            if( !post || post.userId != loginId  ){
+               return res.status(403).send('Forbidden');
+            }
+    
+            Post.destroy({ where: { id : postId } });
+            res.send('success');
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+
+    }
+);
 
 const upload2 = multer();
 router.post('/',

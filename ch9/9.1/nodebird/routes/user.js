@@ -1,11 +1,36 @@
 const express = require('express');
 
 const { isLoggedIn } = require('./middlewares');
-const { User } = require('../models');
+const { User , sequelize } = require('../models');
 
 const router = express.Router();
 
+/** 팔로잉 끊기 */
+router.delete('/:id/follow',
+    isLoggedIn,
+    async(req, res, next) => {
+        try {
 
+            /** 현재 로그인 사용자 */
+            const loginId = req.user.id;
+
+            /** 팔로잉 대상 */
+            const follwoingId = parseInt( req.params.id, 10 );
+            const Follow = sequelize.models.Follow;
+            await Follow.destroy( { where: { followingId: follwoingId ,  followerId: loginId }   } );
+
+            return res.send('success');
+            
+        } catch (error) {
+            console.error(error);
+            next(error); 
+        }
+
+
+    }
+);
+
+/** 팔로잉 하기  */
 router.post('/:id/follow',
     isLoggedIn,
     async (req, res, next) => {
