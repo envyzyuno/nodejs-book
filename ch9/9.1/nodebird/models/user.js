@@ -54,6 +54,7 @@ class User extends Sequelize.Model {
         /**
          * n        : 1
          * Followers : Followings
+         * 팔로잉 하는사람: 팔로잉
          */
          Followers.belongsToMany( Followings, {
             foreignKey: 'followingId',

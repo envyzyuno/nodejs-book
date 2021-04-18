@@ -4,8 +4,13 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const { Post, User, Hashtag } = require('../models');
 
 router.use((req, res, next) =>{
+
+    /**
+     * request 에 있는 세션 사용자 정보를 
+     * res locals 로 세팅한다.
+     */
     res.locals.user = req.user;
-   
+
     /** 로그인 사용자를 팔로잉 하는 카운트   */
     res.locals.followerCount = req.user ? req.user.Followers.length : 0;
 
@@ -13,10 +18,7 @@ router.use((req, res, next) =>{
     /** 로그인 사용자가 팔로잉 하는 카운트 */
     res.locals.followingCount = req.user ? req.user.Followings.length : 0 ;
 
-     /** 로그인 사용자가 팔로잉 하는 id 리스트 
-      * 
-      * 
-      */
+     /** 로그인 사용자가 팔로잉 하는 id 리스트 */
     res.locals.followerIdList = req.user ? req.user.Followings.map( f => f.id ) : [] ;
  
     next();

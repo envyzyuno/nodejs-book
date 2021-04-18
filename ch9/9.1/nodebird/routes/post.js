@@ -34,6 +34,7 @@ const options = {
 const upload = multer( options );
 
 
+/** 이미지 업로드 이후 업로드 경로 응답 */
 router.post('/img', 
     isLoggedIn,
     upload.single('img'),
@@ -92,14 +93,13 @@ router.post('/',
                                             });
                                         })
                                     );
-               
-               console.log('############################################');                         
-               console.log( result );                     
-               console.log('############################################');  
-
+               /** result 유형 [ [Object, boolean ], [Object, boolean ]  ]  
+                * Object: 등록 이나 조회한 객체 
+                * boolean: 등록 여부
+                */
+ 
                post.addHashtags( result.map( r => r[0] ) );
-
-            }                            
+           }                            
             
             res.redirect('/');
         } catch (error) {

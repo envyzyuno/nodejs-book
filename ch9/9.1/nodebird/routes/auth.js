@@ -16,19 +16,10 @@ router.post( '/join',
         try {
             const exUser = await User.findOne({where: { email: email } });
             if( exUser ){
-                /** JAVA 에서 REDIRECT 는 GET 방식으로 이동인데
-                 * 여기서는 어떻게 동작할지??
-                 * GET /join 이라는 라우터가 존재할까???
-                 */
                 return res.redirect('/join?error=exist');
             }
             /** 비밀번호 암호화 */
             const hash = await bcrypt.hash( password, 12 );
-
-            console.log('User:::::::',User);
-
-            User.create();
-
 
             /** 사용자 정보 저장 */
             await User.create({
@@ -37,7 +28,7 @@ router.post( '/join',
                 password: hash,
                 provider: 'local',
             });
-            /** 메인 페이지로 이동 GET 일것 같다.. */
+            /** 메인 페이지로 이동*/
             return res.redirect('/');      
         } catch (error) {
             console.error( error );
@@ -50,30 +41,36 @@ router.post( '/join',
 router.post('/login',
     isNotLoggedIn,
     (req, res, next) => {
-        passport.authenticate('local', (authError, user, info)=>{
-            if(authError){
-                console.error(authError);
-                return next(authError);
-            }
-            if( !user ){
-                return res.redirect(`/?loginError=${info.message}`);
-            }
 
-            /** passport.serializeUser 호출   */
-            return req.login(user, (loginError) =>{
-                if(loginError){
-                    console.error(loginError);
-                    return next(loginError);
+        /** passport.authenticate 는 localStrategy 를 호출한다. */
+        passport.authenticate('local', 
+            (authError, user, info)=>{
+                if(authError){
+                    console.error(authError);
+                    return next(authError);
                 }
-                return res.redirect('/');
-            });
-        })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
+                if( !user ){
+                    return res.redirect(`/?loginError=${info.message}`);
+                }
+
+                /** passport.serializeUser 호출   */
+                return req.login(user, 
+                    (loginError) =>{
+                        if(loginError){
+                            console.error(loginError);
+                            return next(loginError);
+                        }
+                        return res.redirect('/');
+                    }
+                );
+            }
+        )(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
     }
 );
 
-/** 로구아웃 처리 */
+/** 로그아웃 처리 */
 router.get('/logout',
-    // isLoggedIn,
+    isLoggedIn,
     (req, res, next) => {
         /** 로그아웃 이후 메인 페이지로 이동 */
         req.logout();
@@ -82,15 +79,16 @@ router.get('/logout',
     }
 );
 
-/** 카카오 로그인  */
+/** 카카오 로그인 내부적으로 req.login 을 호출한다.  */
 router.get('/kakao', passport.authenticate('kakao') );
 
 router.get('/kakao/callback', 
-    passport.authenticate('kakao', { failureRedirect : '/' } ),
-    ( req, res ) => {
-        res.redirect('/');
-    }
-
+    passport.authenticate(
+        'kakao', 
+        { failureRedirect : '/' } ),
+        ( req, res ) => {
+            res.redirect('/');
+        }
 );
 
 module.exports = router;

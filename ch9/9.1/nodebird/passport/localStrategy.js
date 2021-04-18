@@ -7,7 +7,7 @@ const { User } = require('../models');
 module.exports= () => {
     passport.use( 
         new LocalStrategy(
-            { usernameField: 'email', passwordField: 'password' },
+            { usernameField: 'email', passwordField: 'password' }, /** req.body 의 속성명 */
             async( email, password, done ) => { 
                 /** done: passport.authenticate 의 콜백함수 
                  *  (authError, user, info)=>{}
