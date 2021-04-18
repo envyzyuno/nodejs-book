@@ -51,6 +51,7 @@ app.use( passport.initialize() );
 app.use( passport.session() );
 
 /** 서비스별 라우터 처리 */
+app.use('/', require('./routes') );
 
 
 /** 매핑되는 라우터가 존재하지 않을경우 404 not found */
