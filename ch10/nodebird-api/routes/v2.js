@@ -1,10 +1,38 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const url = require('url');
 
 const { verifyToken, apiLimiter } = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router();
+
+/** 
+ * CORS 
+ * Access-Control-Allow-Origin: *
+router.use(cors({
+    credentials: true,
+}));
+**/
+
+router.use( async(req, res, next) => {
+    const origin = req.get('origin');
+    const host = url.parse( origin ).host;
+    const domain = await Domain.findOne({ where: { host } });
+
+    /**
+    console.log('origin:',origin);
+    console.log('host',host);
+    console.log('domain',domain);
+    */
+    if( domain ){
+        cors({ origin: origin, credentials: true } )(req, res, next);
+    }else{
+        next();
+    }
+
+});
 
 /** 토큰 발급 */ 
 router.post(

@@ -8,6 +8,7 @@ const router = express.Router();
 const URL = 'http://127.0.0.1:8002/v2';
 axios.defaults.headers.origin = 'http://127.0.0.1:4000'; /** origin 헤더 추가 */
 
+
 const request = async(req, api) => {
     try {
         if( !req.session.jwt ){
@@ -29,6 +30,14 @@ const request = async(req, api) => {
         return error.response;    
     }
 };
+
+
+router.get(
+    '/',
+    (req, res) => {
+        res.render('main', { key: process.env.CLIENT_SECRET } );
+    }
+);
 
 /** 나의 포스트 조회 */
 router.get(
