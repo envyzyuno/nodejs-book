@@ -8,7 +8,7 @@ const router = express.Router();
 
 /** 토큰 발급 */
 router.post(
-    '/', 
+    '/token', 
     async(req, res) => {
         const { clientSecret } = req.body;
         try {
