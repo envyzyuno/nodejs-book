@@ -1,10 +1,13 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const { verifyToken } = require('./middlewares');
+const { verifyToken, deprecated } = require('./middlewares');
 const { Domain, User, Post, Hashtag  } = require('../models');
 
 const router = express.Router();
+
+/** v1 api 폐기처리 */
+router.use(deprecated);
 
 /** 내 포스트 조회 */
 router.get(

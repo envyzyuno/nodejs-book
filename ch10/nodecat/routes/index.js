@@ -4,7 +4,8 @@ const axios = require('axios');
 const router = express.Router();
 
 
-const URL = 'http://127.0.0.1:8002/v1';
+//const URL = 'http://127.0.0.1:8002/v1';
+const URL = 'http://127.0.0.1:8002/v2';
 axios.defaults.headers.origin = 'http://127.0.0.1:4000'; /** origin 헤더 추가 */
 
 const request = async(req, api) => {
