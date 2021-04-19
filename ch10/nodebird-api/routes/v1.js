@@ -2,9 +2,52 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const { verifyToken } = require('./middlewares');
-const { Domain, User } = require('../models');
+const { Domain, User, Post, Hashtag  } = require('../models');
 
 const router = express.Router();
+
+/** 내 포스트 조회 */
+router.get(
+    '/posts/my',
+    verifyToken,
+    async(req, res) => {
+        try {
+            const loginId = req.decoded.id;
+            const posts = await Post.findAll({ 
+                            where: { userId: loginId }  
+                         });
+            return res.json({ code:200, payload: posts });  
+        } catch (error) {
+            console.error(error);
+            return res.status(500)
+                      .json({ code:500, message:'서버 에러' });            
+        }
+    }
+);
+
+/** 해당 해시태그들 조회 */
+router.get(
+    '/posts/hashtag/:title',
+    verifyToken,
+    async(req, res) => {
+        try {
+            const title = req.params.title;
+            /** 해시태그 존재 유무 확인 */
+            const hashtag = await Hashtag.findOne({ where: { title: title } });
+            if(!hashtag){
+                return res.status(404).json({ code:404, message:'해시태그 존재하지 않음.' });
+            }
+            /** 해시 태그의 포스트들 조회 */
+            const posts = await hashtag.getPosts();
+            return res.json({ code:200, payload: posts });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500)
+                      .json({ code:500, message:'서버 에러' }); 
+        }
+    }
+);
 
 /** 토큰 발급 */
 router.post(
